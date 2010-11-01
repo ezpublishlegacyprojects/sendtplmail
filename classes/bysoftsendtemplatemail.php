@@ -40,6 +40,7 @@ class bysoftSendTemplateMail
                 $ccReceivers = $this->_getParam('cc_receivers', $tpl, $rootNamespace, $currentNamespace, $functionParameters, $functionPlacement);
                 $subject = $this->_getParam('subject', $tpl, $rootNamespace, $currentNamespace, $functionParameters, $functionPlacement);
                 $body = $this->_getParam('body', $tpl, $rootNamespace, $currentNamespace, $functionParameters, $functionPlacement);
+				$contentType = $this->_getParam('content_type', $tpl, $rootNamespace, $currentNamespace, $functionParameters, $functionPlacement);
                 
                 $sender = $this->_getParam('sender', $tpl, $rootNamespace, $currentNamespace, $functionParameters, $functionPlacement);
                 
@@ -48,6 +49,11 @@ class bysoftSendTemplateMail
                 
                 $mail = new eZMail();
                 $ini = eZINI::instance();
+				
+				// default content type is text/plain
+				if (isset($contentType) && $contentType == 'text/html') {
+					$mail->setContentType($contentType);
+				}
                 
                 if (!$mail->validate($sender)) {
                     $sender = $ini->variable( "MailSettings", "EmailSender" );
